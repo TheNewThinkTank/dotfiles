@@ -1,0 +1,2 @@
+export WECHALLUSER="your_username"
+export WECHALLTOKEN="your_token"
