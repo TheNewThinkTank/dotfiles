@@ -15,6 +15,10 @@ Rename the template `private_env.template` to `.private_env` and fill in your de
 # Create symlinks
 ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
-````
+```
 
 `brew bundle --file ~/Documents/projects/dotfiles/Brewfile`
+
+## TODOs
+
+- Add brewfile
