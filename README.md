@@ -18,7 +18,3 @@ ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
 
 `brew bundle --file ~/Documents/projects/dotfiles/Brewfile`
-
-## TODOs
-
-- Add brewfile
