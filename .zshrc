@@ -34,6 +34,8 @@ eval "$(uv generate-shell-completion zsh)"
 alias k=kubectl
 alias ls='colorls'
 
+alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
+
 # Editor Configuration
 export EDITOR=vim
 
