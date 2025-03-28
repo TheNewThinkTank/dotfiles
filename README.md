@@ -1,6 +1,6 @@
 # dotfiles
 
-dotfiles for Linux, Mac and Windows
+dotfiles for macOS
 
 Rename the template `private_env.template` to `.private_env` and fill in your details
 
