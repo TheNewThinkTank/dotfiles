@@ -63,6 +63,11 @@ export NVM_DIR="$HOME/.nvm"
 ENABLE_CORRECTION="true"  # Enable command auto-correction
 COMPLETION_WAITING_DOTS="true"  # Show dots while waiting for completion
 
+function sshtmpl() {
+  read "comment?Enter key comment (e.g., server name): "
+  ssh-keygen -t ed25519 -C "$comment"
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
