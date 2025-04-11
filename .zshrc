@@ -22,8 +22,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"  #"powerlevel9k/powerlevel9k"  #"robbyru
 plugins=(git kubectl-autocomplete)
 source $ZSH/oh-my-zsh.sh
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vcs dir rbenv)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(root_indicator background_jobs status load)
+# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(vcs dir rbenv)
+# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(root_indicator background_jobs status load)
 
 # Autocompletions
 autoload -Uz compinit && compinit
