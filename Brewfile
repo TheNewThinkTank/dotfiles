@@ -7,6 +7,8 @@ brew "argocd"
 brew "asciinema"
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
 # Bash Automated Testing System
 brew "bats-core"
 # Fancy interface to the Python interpreter
@@ -41,10 +43,14 @@ brew "imagemagick"
 brew "jq"
 # Tool that can switch between kubectl contexts easily and create aliases
 brew "kubectx"
+# Simple terminal UI for git commands
+brew "lazygit"
 # Python generator for the console
 brew "lorem"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# OpenBSD freely-licensed SSH connectivity tools
+brew "openssh"
 # Python interface to Tcl/Tk
 brew "python-tk@3.11"
 # Python interface to Tcl/Tk
@@ -80,6 +86,7 @@ cask "whisky"
 vscode "aaron-bond.better-comments"
 vscode "chakrounanas.turbo-console-log"
 vscode "charliermarsh.ruff"
+vscode "docker.docker"
 vscode "editorconfig.editorconfig"
 vscode "github.copilot"
 vscode "github.copilot-chat"
