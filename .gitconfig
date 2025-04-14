@@ -1,3 +1,23 @@
+[alias]
+  lg = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lga = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  dc = diff --cached
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ls = ls-files
+  ls-ignored = ls-files -o -i --exclude-standard
+  ignore = update-index --assume-unchanged
+  unignore = update-index --no-assume-unchanged
+[core]
+  editor = nvim  # nano
+[grep]
+  lineNumber = true
+  patternType = perl
 [user]
-	name = Gustav Rasmussen
-	email = TheNewThinkTank@users.noreply.github.com
+  name = Gustav Rasmussen
+  email = TheNewThinkTank@users.noreply.github.com
