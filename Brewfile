@@ -35,6 +35,10 @@ brew "geos"
 brew "gh"
 # Distributed revision control system
 brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Render markdown on the CLI
+brew "glow"
 # Vulnerability scanner for container images and filesystems
 brew "grype"
 # Tools and libraries to manipulate images in many formats

@@ -1,4 +1,6 @@
 [alias]
+  so = show --pretty='%C(green)%p%Creset <- %C(red)%h%Creset%C(bold yellow)%d%Creset%n%n%w(72,2,2)%B%n%w(72,0,0)%C(dim white)%an%Creset on %C(dim white)%as%Creset'
+  doc = "!f() { git show --no-patch --pretty=\"# %s%n%n%b%n> %an on _%as_\" ${1-HEAD} | glow; }; f"
   lg = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   lga = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
   st = status
@@ -15,9 +17,12 @@
   unignore = update-index --no-assume-unchanged
 [core]
   editor = nvim  # nano
+  pager = delta
 [grep]
   lineNumber = true
   patternType = perl
 [user]
   name = Gustav Rasmussen
   email = TheNewThinkTank@users.noreply.github.com
+[diff]
+  algorithm = histogram
