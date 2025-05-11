@@ -15,6 +15,7 @@
   ls-ignored = ls-files -o -i --exclude-standard
   ignore = update-index --assume-unchanged
   unignore = update-index --no-assume-unchanged
+  fm = "!f() { git log --oneline --merges --ancestry-path --topo-order --reverse $1..main | head -1; }; f"
 [core]
   editor = nvim  # nano
   pager = delta
