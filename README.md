@@ -31,3 +31,15 @@ brew bundle install --dry-run
 # Install brew packages
 brew bundle --file ~/Documents/projects/dotfiles/Brewfile
 ```
+
+TODO: move below section to separate document
+
+## Git tips
+
+```BASH
+# Tell git to use it's built-in language parser for md files
+echo '*.md diff=markdown' >> .gitattributes
+
+# Search for changes to the README files' Usage section
+git lg -L:Usage:README.md
+```
