@@ -28,3 +28,6 @@
   email = TheNewThinkTank@users.noreply.github.com
 [diff]
   algorithm = histogram
+
+[merge]
+  conflictStyle = diff3
