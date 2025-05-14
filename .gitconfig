@@ -28,6 +28,9 @@
   email = TheNewThinkTank@users.noreply.github.com
 [diff]
   algorithm = histogram
-
 [merge]
   conflictStyle = diff3
+[rerere]
+  enabled = true
+[rebase]
+  autoSquash = true
