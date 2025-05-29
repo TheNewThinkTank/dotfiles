@@ -17,7 +17,7 @@ ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
 
-## Terminal config
+## Zsh config
 
 - [syntax highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - [autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
