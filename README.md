@@ -1,6 +1,7 @@
 # dotfiles
 
-Dotfiles for macOS
+Dotfiles for macOS.
+Includes config for zsh, tmux, nvim, git and more.
 
 Rename the template `private_env.template` to `.private_env` and fill in your details
 
@@ -15,6 +16,11 @@ Rename the template `private_env.template` to `.private_env` and fill in your de
 ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
+
+## Terminal config
+
+- [syntax highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
+- [autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 
 ## Homebrew
 
