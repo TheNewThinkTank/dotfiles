@@ -4,6 +4,7 @@ set title
 
 " core environment
 syntax on
+set hlsearch
 set number
 set ruler
 set mouse=a
@@ -16,8 +17,11 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+set list listchars=tab:\ \ ,trail:·
+set showbreak=//
+
 set noerrorbells
-set visualbell
+set novisualbell
 set backup
 set swapfile
 " set directory^=$HOME/.vim/swap//
