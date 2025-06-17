@@ -19,6 +19,8 @@ brew "btop"
 brew "cmake"
 # Console Matrix
 brew "cmatrix"
+# Disk Usage/Free Utility - a better 'df' alternative
+brew "duf"
 # Simple, fast and user-friendly alternative to find
 brew "fd"
 # Play, record, convert, and stream audio and video
@@ -37,20 +39,32 @@ brew "gh"
 brew "git"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
+# Alternative to top/htop
+brew "glances"
 # Render markdown on the CLI
 brew "glow"
 # Vulnerability scanner for container images and filesystems
 brew "grype"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
+# Calculate various network masks, etc. from a given IP address
+brew "ipcalc"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Tool that can switch between kubectl contexts easily and create aliases
 brew "kubectx"
+# Lazier way to manage everything docker
+brew "lazydocker"
 # Simple terminal UI for git commands
 brew "lazygit"
 # Python generator for the console
 brew "lorem"
+# Clone of ls with colorful output, file type icons, and more
+brew "lsd"
+# 'traceroute' and 'ping' in a single tool
+brew "mtr"
+# NCurses Disk Usage
+brew "ncdu"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
 # OpenBSD freely-licensed SSH connectivity tools
@@ -73,6 +87,8 @@ brew "tldr"
 brew "tmux"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
+# Maintained ctags implementation
+brew "universal-ctags"
 # Extremely fast Python package installer and resolver, written in Rust
 brew "uv"
 # Process YAML, JSON, XML, CSV and properties documents from the CLI
@@ -101,6 +117,7 @@ vscode "jakeboone02.cypher-query-language"
 vscode "jakeboone02.pgn"
 vscode "jetmartin.bats"
 vscode "mechatroner.rainbow-csv"
+vscode "ms-azuretools.vscode-containers"
 vscode "ms-azuretools.vscode-docker"
 vscode "ms-python.black-formatter"
 vscode "ms-python.debugpy"
@@ -117,6 +134,8 @@ vscode "ms-vscode.makefile-tools"
 vscode "njpwerner.autodocstring"
 vscode "redhat.vscode-yaml"
 vscode "reditorsupport.r"
+vscode "reditorsupport.r-syntax"
+vscode "ritwickdey.liveserver"
 vscode "svelte.svelte-vscode"
 vscode "tamasfe.even-better-toml"
 vscode "tomoki1207.pdf"

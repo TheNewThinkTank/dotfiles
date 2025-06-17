@@ -45,9 +45,6 @@ brew bundle dump --describe
 # Update it when needed
 brew bundle dump --force --describe
 
-# Test that Brewfile works by simulating an install
-brew bundle install --dry-run
-
 # Install brew packages
 brew bundle --file ~/Documents/projects/dotfiles/Brewfile
 ```
