@@ -11,6 +11,8 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'scrooloose/nerdtree'
+Plugin 'majutsushi/tagbar'
 
 " end Vundle
 call vundle#end()
@@ -39,3 +41,9 @@ set noerrorbells
 set novisualbell
 set backup
 set swapfile
+
+" plugin configurations
+autocmd VimEnter * NERDTree | wincmd p  " start NERDTree automatically, and ensure platform agnostic
+" autocmd VimEnter * NERDTree  " Enable if NERDTree should have the active cursor by default on start of vim
+let NERDTreeQuitOnOpen=1
+nmap <F8> :TagbarToggle<CR>
