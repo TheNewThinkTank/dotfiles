@@ -22,6 +22,20 @@ ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 - [syntax highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - [autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)
 
+## Vim config
+
+```Bash
+# Clone following repo to ~/.vim/bundle/Vundle.vim after making the parent dirs:
+https://github.com/VundleVim/Vundle.vim
+
+# Setup the config file as in this repo .vimrc example
+# Install the Vundle plugins from `vim ~/.vimrc`, command mode, running: PluginInstall
+```
+
+## Neovim config
+
+located in `.config/nvim`
+
 ## Homebrew
 
 ```BASH

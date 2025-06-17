@@ -1,4 +1,19 @@
-set nocompatible
+set nocompatible  "vim over vi
+filetype off  "disable filetype before Vundle
+
+" set runtime path
+set rtp+=~/.vim/bundle/Vundle.vim
+
+" call Vundle
+call vundle#begin()
+
+" add plugins
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
+" end Vundle
+call vundle#end()
 filetype plugin indent on
 set title
 
@@ -24,4 +39,3 @@ set noerrorbells
 set novisualbell
 set backup
 set swapfile
-" set directory^=$HOME/.vim/swap//
