@@ -1,22 +1,22 @@
 [alias]
   so = show --pretty='%C(green)%p%Creset <- %C(red)%h%Creset%C(bold yellow)%d%Creset%n%n%w(72,2,2)%B%n%w(72,0,0)%C(dim white)%an%Creset on %C(dim white)%as%Creset'
   doc = "!f() { git show --no-patch --pretty=\"# %s%n%n%b%n> %an on _%as_\" ${1-HEAD} | glow; }; f"
-        lg = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-        lga = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
-        st = status --short
-        ci = commit
-        br = branch
-        co = checkout
-        df = diff
-        dc = diff --cached
-        lol = log --graph --decorate --pretty=oneline --abbrev-commit
-        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
-        ls = ls-files
-        ls-ignored = ls-files -o -i --exclude-standard
-        ignore = update-index --assume-unchanged
-        unignore = update-index --no-assume-unchanged
-        fm = "!f() { git log --oneline --merges --ancestry-path --topo-order --reverse $1..main | head -1; }; f"
-        undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; };f"
+  lg = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lga = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+  st = status --short
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  dc = diff --cached
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ls = ls-files
+  ls-ignored = ls-files -o -i --exclude-standard
+  ignore = update-index --assume-unchanged
+  unignore = update-index --no-assume-unchanged
+  fm = "!f() { git log --oneline --merges --ancestry-path --topo-order --reverse $1..main | head -1; }; f"
+  undo = "!f() { git reset --hard $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; };f"
 [branch]
   sort = -committerdate
 [commit]
@@ -47,8 +47,8 @@
 [tag]
   sort = version:refname
 [user]
-        name = Gustav Rasmussen
-  email = TheNewThinkTank@users.noreply.github.com  # gcr84@hotmail.com
+  name = Gustav Rasmussen
+  email = TheNewThinkTank@users.noreply.github.com
 [grep]
   lineNumber = true
   patternType = perl
@@ -58,7 +58,7 @@
   # mnemonicPrefix = true
   # renames = true
 [merge]
-        conflictStyle = diff3
+  conflictStyle = diff3
 [rerere]
   enabled = true
   autoupdate = true
