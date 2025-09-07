@@ -1,5 +1,6 @@
 tap "anchore/grype"
 tap "derailed/k9s"
+tap "hashicorp/tap"
 tap "homebrew/bundle"
 # GitOps Continuous Delivery for Kubernetes
 brew "argocd"
@@ -19,6 +20,8 @@ brew "btop"
 brew "cmake"
 # Console Matrix
 brew "cmatrix"
+# Tool for exploring each layer in a docker image
+brew "dive"
 # Disk Usage/Free Utility - a better 'df' alternative
 brew "duf"
 # Simple, fast and user-friendly alternative to find
@@ -31,6 +34,8 @@ brew "fzf"
 brew "gcc"
 # Google Drive CLI Client
 brew "gdrive"
+# Disk usage analyzer with console interface written in Go
+brew "gdu"
 # Geometry Engine
 brew "geos"
 # GitHub command-line tool
@@ -67,6 +72,8 @@ brew "mtr"
 brew "ncdu"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
+# Flexible test automation for Python
+brew "nox"
 # OpenBSD freely-licensed SSH connectivity tools
 brew "openssh"
 # Python interface to Tcl/Tk
@@ -81,6 +88,8 @@ brew "ruby"
 brew "sl"
 # Tool to create intelligent and beautiful documentation
 brew "sphinx-doc"
+# Thin wrapper for Terraform e.g. for locking state
+brew "terragrunt"
 # Simplified and community-driven man pages
 brew "tldr"
 # Terminal multiplexer
@@ -99,6 +108,8 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 # Kubernetes CLI To Manage Your Clusters In Style!
 brew "derailed/k9s/k9s"
+# Terraform
+brew "hashicorp/tap/terraform"
 # Developer experience toolkit used to check, test, merge, and monitor code
 cask "trunk-io"
 # Wine wrapper built with SwiftUI
@@ -124,6 +135,7 @@ vscode "ms-python.debugpy"
 vscode "ms-python.isort"
 vscode "ms-python.python"
 vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
 vscode "ms-toolsai.jupyter"
 vscode "ms-toolsai.jupyter-keymap"
 vscode "ms-toolsai.jupyter-renderers"
@@ -141,3 +153,4 @@ vscode "tamasfe.even-better-toml"
 vscode "tomoki1207.pdf"
 vscode "tyriar.lorem-ipsum"
 vscode "vscodevim.vim"
+vscode "yoshinorin.image-metadata-viewer"
