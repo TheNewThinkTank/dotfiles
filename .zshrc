@@ -29,7 +29,7 @@ eval "$(uv generate-shell-completion zsh)"
 
 # Aliases
 alias k=kubectl
-alias ls='colorls'
+# alias ls='colorls'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
 # History Configuration
@@ -49,6 +49,16 @@ function sshtmpl() {
   read "comment?Enter key comment (e.g., server name): "
   ssh-keygen -t ed25519 -C "$comment"
 }
+
+field () {
+  awk -F "${2:- }" "{ print \$${1:-1} }"
+}
+
+total () {
+  awk -F "${2:- }" "{ s += \$${1:-1} } END { print s}"
+}
+
+# Example usage: cat somefile | field 3 | total
 
 # # Powerlevel10k Configuration
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
