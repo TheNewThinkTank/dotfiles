@@ -12,6 +12,10 @@ export TZ='America/New_York'
 export VISUAL='vim'
 export PATH=$PATH:/opt/homebrew/bin
 
+# History configuration
+HISTCONTROL=ignoreboth
+HISTTIMEFORMAT="%Y-%m-%d %T "
+
 # Support colors in less
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 1)
 export LESS_TERMCAP_md=$(tput bold; tput setaf 1)

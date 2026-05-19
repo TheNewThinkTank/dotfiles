@@ -33,8 +33,10 @@ alias k=kubectl
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
 # History Configuration
-HISTCONTROL=ignoreboth
-HISTTIMEFORMAT="%Y-%m-%d %T "
+setopt HIST_IGNORE_BOTH
+setopt EXTENDED_HISTORY
+HISTSIZE=10000
+SAVEHIST=10000
 
 # NVM (Node Version Manager)
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
