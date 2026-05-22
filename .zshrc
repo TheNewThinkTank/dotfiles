@@ -33,7 +33,8 @@ alias k=kubectl
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
 # History Configuration
-setopt HIST_IGNORE_BOTH
+setopt HIST_IGNORE_SPACE
+setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
 HISTSIZE=10000
 SAVEHIST=10000
