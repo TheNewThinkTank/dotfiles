@@ -32,6 +32,12 @@ alias k=kubectl
 # alias ls='colorls'
 alias gh-create='gh repo create --private --source=. --remote=origin && git push -u --all && gh browse'
 
+alias sso-session='aws sso login --sso-session <SESSION_NAME> --no-browser'
+
+alias awsconf="code ~/.aws/config"
+alias awsls="aws configure list-profiles"
+alias awswho="aws sts get-caller-identity"
+
 # History Configuration
 setopt HIST_IGNORE_SPACE
 setopt HIST_IGNORE_ALL_DUPS
