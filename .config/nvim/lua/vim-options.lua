@@ -37,5 +37,5 @@ vim.opt.undofile = true         -- persistent undo history
 vim.opt.undodir = vim.fn.expand("~/.vim/undo//")
 
 -- UI behavior
-vim.opt.noerrorbells = true
-vim.opt.novisualbell = true
+vim.opt.errorbells = false
+vim.opt.visualbell = false
