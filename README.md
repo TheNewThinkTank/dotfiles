@@ -7,15 +7,25 @@ Rename the template `private_env.template` to `.private_env` and fill in your de
 
 ## Move config files
 
-`mv ~/.zshrc ~/Documents/projects/dotfiles/.zshrc`<br>
-`mv ~/.gitconfig ~/Documents/projects/dotfiles/.gitconfig`
+``` bash
+mv ~/.zshrc ~/Documents/projects/dotfiles/.zshrc
+mv ~/.gitconfig ~/Documents/projects/dotfiles/.gitconfig
+```
 
 ## Create symlinks
 
-```BASH
+``` bash
 ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
+
+etc., or run rsync:
+
+``` bash
+rsync -av --delete ~/Documents/projects/dotfiles/.config/nvim/ ~/.config/nvim/
+```
+
+etc.
 
 ## Zsh config
 
@@ -38,7 +48,7 @@ located in `.config/nvim`
 
 ## Homebrew
 
-```BASH
+``` bash
 # Create Brewfile
 brew bundle dump --describe
 
@@ -53,7 +63,7 @@ TODO: move below section to separate document
 
 ## Git tips
 
-```BASH
+``` bash
 # Tell git to use it's built-in language parser for md files
 echo '*.md diff=markdown' >> .gitattributes
 
