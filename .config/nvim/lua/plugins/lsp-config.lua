@@ -12,11 +12,6 @@ return {
     opts = {
       auto_install = true,
     },
-    -- config = function()
-    --   require("mason-lspconfig").setup({
-    --     ensure_installed = { "lua_ls", "ts_ls" }
-    --   })
-    -- end
   },
   {
     "neovim/nvim-lspconfig",
@@ -38,13 +33,13 @@ return {
         capabilities = capabilities
       })
 
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
-      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
-      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
-
-      -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {})
-      -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, {})
+      local opts = { noremap = true, silent = true }
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, opts)
+      vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, opts)
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+      vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
 
     end
   }
