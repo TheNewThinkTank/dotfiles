@@ -61,3 +61,7 @@ let NERDTreeQuitOnOpen=1
 nmap <F8> :TagbarToggle<CR>
 " nmap <F5> <Plug>VimspectorContinue<CR>
 " nmap <F6> <Plug>VimspectorStop<CR>
+
+" Move lines up and down with Alt+j and Alt+k
+nnoremap <A-j> :m+1<CR>==
+nnoremap <A-k> :m-2<CR>==
