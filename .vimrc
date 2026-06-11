@@ -14,17 +14,11 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'scrooloose/nerdtree'
 Plugin 'majutsushi/tagbar'
 Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'junegunn/fzf'
 Plugin 'tpope/vim-surround'
-" Plugin 'valloric/youcompleteme'  " requires a vim version with Python3
-" support
-" support
-" Plugin 'neoclide/coc.nvim'
 Plugin 'tpope/vim-fugitive'  " git integration
 Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plugin 'xuyuanp/nerdtree-git-plugin'
 Plugin 'dense-analysis/ale'
-" Plugin 'puremourning/vimspector'  " requires a vim version with Python3 support
 
 " end Vundle
 call vundle#end()
@@ -34,6 +28,9 @@ set title
 " core environment
 syntax on
 set hlsearch
+set incsearch       " show matches as you type
+set ignorecase      " ignore case in searches
+set smartcase       " unless you use uppercase
 set number
 set ruler
 set mouse=a
@@ -52,16 +49,29 @@ set showbreak=//
 set noerrorbells
 set novisualbell
 set backup
+set backupdir=~/.vim/backup//     " keep backups organized
 set swapfile
+set directory=~/.vim/swaps//      " keep swaps organized
+set undofile                       " enable persistent undo
+set undodir=~/.vim/undo//         " organize undo history
+
+" UI improvements
+set scrolloff=5     " keep 5 lines visible when scrolling
+set sidescroll=5
+set cursorline      " highlight current line
+
+" Performance
+set lazyredraw      " faster scrolling
+set ttyfast
 
 " plugin configurations
-" autocmd VimEnter * NERDTree | wincmd p  " start NERDTree automatically, and ensure platform agnostic
-" autocmd VimEnter * NERDTree  " Enable if NERDTree should have the active cursor by default on start of vim
 let NERDTreeQuitOnOpen=1
 nmap <F8> :TagbarToggle<CR>
-" nmap <F5> <Plug>VimspectorContinue<CR>
-" nmap <F6> <Plug>VimspectorStop<CR>
 
-" Move lines up and down with Alt+j and Alt+k
+" Key mappings - move lines up and down with Alt+j and Alt+k
 nnoremap <A-j> :m+1<CR>==
 nnoremap <A-k> :m-2<CR>==
+
+" Visual mode line movement
+vnoremap <A-j> :m'>+1<CR>gv=gv
+vnoremap <A-k> :m'<-2<CR>gv=gv
