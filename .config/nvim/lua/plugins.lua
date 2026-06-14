@@ -1,6 +1,6 @@
 return {
+  require("plugins.catppuccin"),  -- Load first with priority
   require("plugins.alpha"),
-  require("plugins.catppuccin"),
   require("plugins.completions"),
   require("plugins.lsp-config"),
   require("plugins.lualine"),
