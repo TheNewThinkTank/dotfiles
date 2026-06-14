@@ -24,17 +24,21 @@ return {
     config = function()
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      local lspconfig = require("lspconfig")
-      lspconfig.ts_ls.setup({
+      -- Use the new vim.lsp.config API instead of require('lspconfig')
+      vim.lsp.config("ts_ls", {
+        cmd = { "typescript-language-server", "--stdio" },
         capabilities = capabilities
       })
-      lspconfig.solargraph.setup({
+      vim.lsp.config("solargraph", {
+        cmd = { "solargraph", "stdio" },
         capabilities = capabilities
       })
-      lspconfig.html.setup({
+      vim.lsp.config("html", {
+        cmd = { "html-languageserver", "--stdio" },
         capabilities = capabilities
       })
-      lspconfig.lua_ls.setup({
+      vim.lsp.config("lua_ls", {
+        cmd = { "lua-language-server" },
         capabilities = capabilities
       })
 
