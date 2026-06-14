@@ -1,8 +1,8 @@
 -- Indentation / tabbing
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=2")
-vim.cmd("set softtabstop=2")
-vim.cmd("set shiftwidth=2")
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
 
 -- Leader key
 vim.g.mapleader = " "
@@ -29,6 +29,13 @@ vim.opt.spell = true
 vim.opt.spelllang = "en_us"
 
 -- File backup and undo
+local function ensure_dir(dir)
+  if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p") end
+end
+ensure_dir(vim.fn.expand("~/.vim/backup"))
+ensure_dir(vim.fn.expand("~/.vim/swaps"))
+ensure_dir(vim.fn.expand("~/.vim/undo"))
+
 vim.opt.backup = true
 vim.opt.backupdir = vim.fn.expand("~/.vim/backup//")
 vim.opt.swapfile = true
