@@ -1,0 +1,95 @@
+# Shared shell configuration — sourced by both .bashrc and .zshrc
+
+# Environment
+export EDITOR='vim'
+export VISUAL='vim'
+export PAGER='less'
+export MANPAGER='less'
+export TZ='America/New_York'
+export GREP_COLOR='1;36'
+export LSCOLORS='ExGxbEaECxxEhEhBaDaCaD'
+[[ ":$PATH:" != *":/opt/homebrew/bin:"* ]] && export PATH=/opt/homebrew/bin:$PATH
+
+# Color support for less/man
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;31m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[1;33;44m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[4;1;32m'
+export LESS_TERMCAP_mr=$'\e[7m'
+export LESS_TERMCAP_mh=$'\e[2m'
+export LESS_TERMCAP_ZN=$'\e[74m'
+export LESS_TERMCAP_ZV=$'\e[75m'
+export LESS_TERMCAP_ZO=$'\e[73m'
+export LESS_TERMCAP_ZW=$'\e[75m'
+
+# ls color support
+if ls --color=auto /dev/null &>/dev/null; then
+    alias ls='ls -p --color=auto'
+else
+    alias ls='ls -p -G'
+fi
+
+# Aliases
+alias ..='echo "cd .."; cd ..'
+alias ag='rg'
+alias chomd='chmod'
+alias gerp='grep'
+alias hl='rg --passthru'
+alias l='ls'
+alias ll='ls -lha'
+alias suod='sudo'
+
+grep --color=auto < /dev/null &>/dev/null &&
+    alias grep='grep --color=auto'
+
+xdg-open --version &>/dev/null &&
+    alias open='xdg-open'
+
+# print a colorized diff
+colordiff() {
+    local red=$(tput setaf 1 2>/dev/null)
+    local green=$(tput setaf 2 2>/dev/null)
+    local cyan=$(tput setaf 6 2>/dev/null)
+    local reset=$(tput sgr0 2>/dev/null)
+    local ret=0
+    diff -u "$@" | awk "
+    /^\-/ { printf(\"%s\", \"$red\") }
+    /^\+/ { printf(\"%s\", \"$green\") }
+    /^@/  { printf(\"%s\", \"$cyan\") }
+    { print \$0 \"$reset\" }"
+    [ ${PIPESTATUS[0]:-${pipestatus[1]}} -ne 0 ] && ret=1
+    return $ret
+}
+
+# Print all 256 colors
+colors() {
+    local i
+    for i in $(seq 0 255); do
+        printf "\x1b[38;5;${i}mcolor %d\n" "$i"
+    done
+    tput sgr0
+}
+
+# Copy stdin to the clipboard
+copy() {
+    pbcopy 2>/dev/null ||
+        xsel 2>/dev/null ||
+        clip.exe
+}
+
+# print a rainbow if truecolor is available to the terminal
+truecolor-rainbow() {
+    local i r g b
+    for i in $(seq 0 76); do
+        r=$((255 - (i * 255 / 76)))
+        g=$((i * 510 / 76))
+        b=$((i * 255 / 76))
+        [ $g -gt 255 ] && g=$((510 - g))
+        printf '\033[48;2;%d;%d;%dm ' "$r" "$g" "$b"
+    done
+    tput sgr0
+    echo
+}

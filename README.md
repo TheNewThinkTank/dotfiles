@@ -15,6 +15,8 @@ mv ~/.gitconfig ~/Documents/projects/dotfiles/.gitconfig
 ## Create symlinks
 
 ``` bash
+ln -s ~/Documents/projects/dotfiles/.shrc ~/.shrc
+ln -s ~/Documents/projects/dotfiles/.bashrc ~/.bashrc
 ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
