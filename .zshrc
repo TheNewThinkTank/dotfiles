@@ -41,10 +41,17 @@ SAVEHIST=10000
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 
-# NVM (Node Version Manager)
+# NVM (Node Version Manager) — lazy-loaded to avoid shell startup cost
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+nvm() {
+    unfunction nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm "$@"
+}
+node() { nvm; node "$@"; }
+npm()  { nvm; npm  "$@"; }
+npx()  { nvm; npx  "$@"; }
 
 # Aliases
 alias k=kubectl
@@ -75,5 +82,9 @@ total () {
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Syntax Highlighting & Autosuggestions
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+_BREW_PREFIX="$(brew --prefix 2>/dev/null || echo /opt/homebrew)"
+[ -f "$_BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+    source "$_BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+[ -f "$_BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+    source "$_BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+unset _BREW_PREFIX

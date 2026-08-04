@@ -2,7 +2,9 @@ tap "anchore/grype"
 tap "derailed/k9s"
 tap "hashicorp/tap"
 tap "homebrew/bundle"
+tap "nikitabobko/tap"
 # GitOps Continuous Delivery for Kubernetes
+brew "ansible"
 brew "argocd"
 # Record and share terminal sessions
 brew "asciinema"
@@ -111,6 +113,8 @@ brew "derailed/k9s/k9s"
 # Terraform
 brew "hashicorp/tap/terraform"
 # Developer experience toolkit used to check, test, merge, and monitor code
+cask "nikitabobko/tap/aerospace"
+cask "raycast"
 cask "trunk-io"
 # Wine wrapper built with SwiftUI
 cask "whisky"

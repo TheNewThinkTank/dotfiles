@@ -3,31 +3,38 @@
 Dotfiles for macOS.
 Includes config for zsh, tmux, nvim, git and more.
 
-Rename the template `private_env.template` to `.private_env` and fill in your details
+Rename the template `private_env.template` to `.private_env` and fill in your details.
+
+## Bootstrap (fresh machine)
+
+```bash
+git clone https://github.com/TheNewThinkTank/dotfiles.git ~/Documents/projects/dotfiles
+cd ~/Documents/projects/dotfiles
+./bootstrap.sh
+```
+
+`bootstrap.sh` will:
+1. Install Homebrew if not present
+2. Install all packages from `Brewfile`
+3. Sync dotfiles to `~`
 
 ## Move config files
 
-``` bash
+```bash
 mv ~/.zshrc ~/Documents/projects/dotfiles/.zshrc
 mv ~/.gitconfig ~/Documents/projects/dotfiles/.gitconfig
 ```
 
 ## Create symlinks
 
-``` bash
+```bash
 ln -s ~/Documents/projects/dotfiles/.shrc ~/.shrc
 ln -s ~/Documents/projects/dotfiles/.bashrc ~/.bashrc
 ln -s ~/Documents/projects/dotfiles/.zshrc ~/.zshrc
 ln -s ~/Documents/projects/dotfiles/.gitconfig ~/.gitconfig
 ```
 
-etc., or run rsync:
-
-``` bash
-rsync -av --delete ~/Documents/projects/dotfiles/.config/nvim/ ~/.config/nvim/
-```
-
-etc.
+Or run bootstrap.sh which uses rsync to sync all dotfiles at once.
 
 ## Zsh config
 
@@ -36,9 +43,9 @@ etc.
 
 ## Vim config
 
-```Bash
+```bash
 # Clone following repo to ~/.vim/bundle/Vundle.vim after making the parent dirs:
-https://github.com/VundleVim/Vundle.vim
+# https://github.com/VundleVim/Vundle.vim
 
 # Setup the config file as in this repo .vimrc example
 # Install the Vundle plugins from `vim ~/.vimrc`, command mode, running: PluginInstall
@@ -46,11 +53,11 @@ https://github.com/VundleVim/Vundle.vim
 
 ## Neovim config
 
-located in `.config/nvim`
+Located in `nvim/.config/nvim/`.
 
 ## Homebrew
 
-``` bash
+```bash
 # Create Brewfile
 brew bundle dump --describe
 
@@ -61,12 +68,10 @@ brew bundle dump --force --describe
 brew bundle --file ~/Documents/projects/dotfiles/Brewfile
 ```
 
-TODO: move below section to separate document
-
 ## Git tips
 
-``` bash
-# Tell git to use it's built-in language parser for md files
+```bash
+# Tell git to use its built-in language parser for md files
 echo '*.md diff=markdown' >> .gitattributes
 
 # Search for changes to the README files' Usage section

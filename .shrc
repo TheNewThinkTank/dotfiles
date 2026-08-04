@@ -1,8 +1,8 @@
 # Shared shell configuration — sourced by both .bashrc and .zshrc
 
 # Environment
-export EDITOR='vim'
-export VISUAL='vim'
+export EDITOR='nvim'
+export VISUAL='nvim'
 export PAGER='less'
 export MANPAGER='less'
 export TZ='America/New_York'
@@ -74,11 +74,13 @@ colors() {
 }
 
 # Copy stdin to the clipboard
-copy() {
-    pbcopy 2>/dev/null ||
-        xsel 2>/dev/null ||
-        clip.exe
-}
+if command -v pbcopy &>/dev/null; then
+    alias copy='pbcopy'
+elif command -v xsel &>/dev/null; then
+    alias copy='xsel --clipboard --input'
+else
+    alias copy='clip.exe'
+fi
 
 # print a rainbow if truecolor is available to the terminal
 truecolor-rainbow() {

@@ -1,8 +1,20 @@
 #!/usr/bin/env bash
 
-cd "$(dirname "${BASH_SOURCE}")";
+cd "$(dirname "${BASH_SOURCE[0]}")";
 
 git pull origin main;
+
+# Install Homebrew if not present
+if ! command -v brew &>/dev/null; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+# Install packages from Brewfile
+if [ -f "Brewfile" ]; then
+  echo "Installing packages from Brewfile..."
+  brew bundle --file=Brewfile
+fi
 
 function doIt() {
   rsync --exclude ".git/" \
@@ -12,13 +24,10 @@ function doIt() {
     --exclude "README.md" \
     --exclude "LICENSE" \
     -avh --no-perms . ~;
-  # source ~/.bash_profile;
-  source ~/.zsh_profile;
-  # source ~/.bashrc;
-  # source ~/.zshrc;
+  source ~/.zshrc;
 }
 
-if [ "$1" == "--force" -o "$1" == "-f" ]; then
+if [ "$1" == "--force" ] || [ "$1" == "-f" ]; then
   doIt;
 else
   read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
@@ -28,4 +37,3 @@ else
   fi;
 fi;
 unset doIt;
-
