@@ -5,10 +5,13 @@ export EDITOR='nvim'
 export VISUAL='nvim'
 export PAGER='less'
 export MANPAGER='less'
-export TZ='America/New_York'
+# export TZ='Europe/Copenhagen'
 export GREP_COLOR='1;36'
 export LSCOLORS='ExGxbEaECxxEhEhBaDaCaD'
 [[ ":$PATH:" != *":/opt/homebrew/bin:"* ]] && export PATH=/opt/homebrew/bin:$PATH
+
+KUBECONFIG=$(ls $HOME/.kube/*.yaml | tr '\n' ':')
+export KUBECONFIG
 
 # Color support for less/man
 export LESS_TERMCAP_mb=$'\e[1;31m'
