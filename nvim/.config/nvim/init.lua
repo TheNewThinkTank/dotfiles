@@ -14,3 +14,9 @@ vim.opt.rtp:prepend(lazypath)
 require("vim-options")
 require("keymaps")
 require("lazy").setup({ import = "plugins" })
+
+vim.cmd([[
+  highlight Normal guibg=NONE ctermbg=NONE
+  highlight NonText guibg=NONE ctermbg=NONE
+]])
+

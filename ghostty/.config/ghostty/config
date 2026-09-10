@@ -1,3 +1,10 @@
 
 macos-option-as-alt = left
 theme = Catppuccin Mocha
+
+# Controls window transparency (0.0 is invisible, 1.0 is fully opaque)
+background-opacity = 0.85
+
+# Optional: Adds a macOS frosted glass blur effect so text remains readable
+background-blur = true
+

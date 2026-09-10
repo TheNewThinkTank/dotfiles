@@ -60,6 +60,9 @@ set scrolloff=5     " keep 5 lines visible when scrolling
 set sidescroll=5
 set cursorline      " highlight current line
 
+autocmd ColorScheme * highlight Normal ctermbg=none guibg=none
+autocmd ColorScheme * highlight NonText ctermbg=none guibg=none
+
 " Performance
 set lazyredraw      " faster scrolling
 set ttyfast
