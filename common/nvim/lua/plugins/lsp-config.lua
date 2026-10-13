@@ -1,46 +1,37 @@
+local servers = { "ts_ls", "solargraph", "html", "lua_ls" }
+
 return {
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
+    version = "v2.3.1",
     lazy = false,
     config = function()
       require("mason").setup()
     end
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
+    version = "v2.3.0",
     lazy = false,
+    dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     opts = {
-      auto_install = true,
+      ensure_installed = servers,
+      automatic_enable = servers,
     },
   },
   {
     "neovim/nvim-lspconfig",
+    version = "v2.12.0",
     lazy = false,
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      "mason-org/mason.nvim",
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      -- Use the new vim.lsp.config API instead of require('lspconfig')
-      vim.lsp.config("ts_ls", {
-        cmd = { "typescript-language-server", "--stdio" },
-        capabilities = capabilities
-      })
-      vim.lsp.config("solargraph", {
-        cmd = { "solargraph", "stdio" },
-        capabilities = capabilities
-      })
-      vim.lsp.config("html", {
-        cmd = { "html-languageserver", "--stdio" },
-        capabilities = capabilities
-      })
-      vim.lsp.config("lua_ls", {
-        cmd = { "lua-language-server" },
-        capabilities = capabilities
-      })
+      vim.lsp.config("*", { capabilities = capabilities })
+      vim.lsp.enable(servers)
 
       local opts = { noremap = true, silent = true }
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)

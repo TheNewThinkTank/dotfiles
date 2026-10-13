@@ -1,0 +1,59 @@
+name: Dotfiles Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [personal, work]
+    env:
+      DOTFILES_PLATFORM: macos
+      DOTFILES_PROFILE: ${{ matrix.profile }}
+      HOMEBREW_NO_AUTO_UPDATE: "1"
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_INSTALL_UPGRADE: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install Check Dependencies
+        run: brew install bash bats-core jq neovim openshift-cli shellcheck tmux yq stylua isort prettier rubocop
+      - name: Run Configuration Checks
+        run: make check
+      - name: Run Real Pinned Integrations
+        run: make integration
+  ubuntu:
+    runs-on: ubuntu-latest
+    container: ubuntu:26.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [personal, work]
+    env:
+      DOTFILES_PLATFORM: ubuntu
+      DOTFILES_PROFILE: ${{ matrix.profile }}
+    steps:
+      - name: Prepare Ubuntu Container
+        run: apt-get update && apt-get install --no-remove -y ca-certificates git
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run Native Ubuntu Checks
+        shell: bash
+        run: bash tests/ubuntu.sh

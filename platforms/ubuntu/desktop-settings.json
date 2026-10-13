@@ -1,0 +1,6 @@
+[
+  { "schema": "org.gnome.desktop.wm.keybindings", "key": "switch-to-workspace-left", "value": "['<Super>h']" },
+  { "schema": "org.gnome.desktop.wm.keybindings", "key": "switch-to-workspace-right", "value": "['<Super>l']" },
+  { "schema": "org.gnome.desktop.wm.keybindings", "key": "move-to-workspace-left", "value": "['<Super><Shift>h']" },
+  { "schema": "org.gnome.desktop.wm.keybindings", "key": "move-to-workspace-right", "value": "['<Super><Shift>l']" }
+]

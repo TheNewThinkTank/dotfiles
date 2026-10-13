@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "name": "oh-my-zsh",
+      "repository": "https://github.com/ohmyzsh/ohmyzsh.git",
+      "commit": "964ddf789b022b6958b27d02d7fa54f552de21e9",
+      "destination": ".oh-my-zsh",
+      "entrypoint": "oh-my-zsh.sh"
+    },
+    {
+      "name": "powerlevel10k",
+      "repository": "https://github.com/romkatv/powerlevel10k.git",
+      "commit": "d05a1b00f9a61f9578bf9dc19b8451942dde8734",
+      "destination": ".oh-my-zsh/custom/themes/powerlevel10k",
+      "entrypoint": "powerlevel10k.zsh-theme"
+    },
+    {
+      "name": "vundle",
+      "repository": "https://github.com/VundleVim/Vundle.vim.git",
+      "commit": "5548a1a937d4e72606520c7484cd384e6c76b565",
+      "destination": ".vim/bundle/Vundle.vim",
+      "entrypoint": "autoload/vundle.vim"
+    },
+    {
+      "name": "tpm",
+      "repository": "https://github.com/tmux-plugins/tpm.git",
+      "commit": "e261deb1b47614eed3400089ce7197dc68acc4eb",
+      "destination": ".tmux/plugins/tpm",
+      "entrypoint": "tpm"
+    },
+    {
+      "name": "catppuccin-tmux",
+      "repository": "https://github.com/catppuccin/tmux.git",
+      "commit": "b2dc4121fe63c6da41fa030bcbc5440a994b58ef",
+      "destination": ".tmux/plugins/tmux",
+      "entrypoint": "catppuccin.tmux"
+    },
+    {
+      "name": "tmux-cpu",
+      "repository": "https://github.com/tmux-plugins/tmux-cpu.git",
+      "commit": "bcb110d754ab2417de824c464730c412a3eb2769",
+      "destination": ".tmux/plugins/tmux-cpu",
+      "entrypoint": "cpu.tmux"
+    },
+    {
+      "name": "tmux-battery",
+      "repository": "https://github.com/tmux-plugins/tmux-battery.git",
+      "commit": "43832651ede43f54dcf0588727c1957fe648d57d",
+      "destination": ".tmux/plugins/tmux-battery",
+      "entrypoint": "battery.tmux"
+    }
+  ]
+}

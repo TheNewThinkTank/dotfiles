@@ -1,0 +1,208 @@
+tap "anchore/grype"
+tap "azure/kubelogin", "https://github.com/Azure/homebrew-kubelogin"
+tap "derailed/k9s"
+tap "hashicorp/tap"
+tap "homebrew/bundle"
+tap "nikitabobko/tap"
+tap "oven-sh/bun"
+tap "skyhook-io/tap"
+# GitOps Continuous Delivery for Kubernetes
+brew "ansible"
+brew "argocd"
+# Record and share terminal sessions
+brew "asciinema"
+# Microsoft Azure CLI 2.0
+brew "azure-cli"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Clone of cat(1) with syntax highlighting and Git integration
+brew "bat"
+# Bash Automated Testing System
+brew "bats-core"
+# Fancy interface to the Python interpreter
+brew "bpython"
+# Resource monitor. C++ version and continuation of bashtop and bpytop
+brew "btop"
+# Cross-platform make
+brew "cmake"
+# Console Matrix
+brew "cmatrix"
+# GNU File, Shell, and Text utilities
+brew "coreutils"
+# Tool for exploring each layer in a docker image
+brew "dive"
+# Disk Usage/Free Utility - a better 'df' alternative
+brew "duf"
+# Modern, maintained replacement for ls
+brew "eza"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Download assets from a commit, branch, or tag of GitHub repositories
+brew "fetch"
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
+# Command-line fuzzy finder written in Go
+brew "fzf"
+# GNU compiler collection
+brew "gcc"
+# Google Drive CLI Client
+brew "gdrive"
+# Disk usage analyzer with console interface written in Go
+brew "gdu"
+# Geometry Engine
+brew "geos"
+# GitHub command-line tool
+brew "gh"
+# Distributed revision control system
+brew "git"
+# Syntax-highlighting pager for git and diff output
+brew "git-delta"
+# Git extension for versioning large files
+brew "git-lfs"
+# Alternative to top/htop
+brew "glances"
+# Render markdown on the CLI
+brew "glow"
+# Open source programming language to build simple/reliable/efficient software
+brew "go"
+# Vulnerability scanner for container images and filesystems
+brew "grype"
+# CLI for Harbor container registry
+brew "harbor-cli"
+# Agent multiplexer that lives in your terminal
+brew "herdr"
+# Tools and libraries to manipulate images in many formats
+brew "imagemagick"
+# Calculate various network masks, etc. from a given IP address
+brew "ipcalc"
+brew "isort"
+# Lightweight and flexible command-line JSON processor
+brew "jq"
+# Colorize your kubectl output
+brew "kubecolor"
+# Tool that can switch between kubectl contexts easily and create aliases
+brew "kubectx"
+# Lazier way to manage everything docker
+brew "lazydocker"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Python generator for the console
+brew "lorem"
+# Clone of ls with colorful output, file type icons, and more
+brew "lsd"
+# 'traceroute' and 'ping' in a single tool
+brew "mtr"
+# NCurses Disk Usage
+brew "ncdu"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Open-source, cross-platform JavaScript runtime environment
+brew "node"
+# Flexible test automation for Python
+brew "nox"
+# OpenShift command-line interface tools
+brew "openshift-cli"
+# OpenBSD freely-licensed SSH connectivity tools
+brew "openssh"
+brew "prettier"
+# Python interface to Tcl/Tk
+brew "python-tk@3.11"
+# Python interface to Tcl/Tk
+brew "python-tk@3.12"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+brew "rubocop"
+# Powerful, clean, object-oriented scripting language
+brew "ruby"
+brew "shellcheck"
+# Prints a steam locomotive if you type sl instead of ls
+brew "sl"
+# Tool to create intelligent and beautiful documentation
+brew "sphinx-doc"
+brew "stylua"
+# Thin wrapper for Terraform e.g. for locking state
+brew "terragrunt"
+# Simplified and community-driven man pages
+brew "tldr"
+# Terminal multiplexer
+brew "tmux"
+# Display directories as trees (with optional color/HTML output)
+brew "tree"
+# Maintained ctags implementation
+brew "universal-ctags"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
+# Internet file retriever
+brew "wget"
+# Process YAML, JSON, XML, CSV and properties documents from the CLI
+brew "yq"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
+# A Kubernetes credential (exec) plugin implementing Azure authentication
+brew "azure/kubelogin/kubelogin"
+# Kubernetes CLI To Manage Your Clusters In Style!
+brew "derailed/k9s/k9s"
+# Terraform
+brew "hashicorp/tap/terraform"
+# JavaScript runtime, bundler, transpiler and package manager
+brew "oven-sh/bun/bun"
+# Kubernetes topology, traffic, and Helm management
+brew "skyhook-io/tap/radar"
+# Developer experience toolkit used to check, test, merge, and monitor code
+cask "nikitabobko/tap/aerospace"
+# Terminal-based AI coding assistant
+cask "claude-code"
+# Open-source keystroke visualiser
+cask "keycastr"
+cask "raycast"
+cask "trunk-io"
+# Wine wrapper built with SwiftUI
+cask "whisky"
+vscode "aaron-bond.better-comments"
+vscode "chakrounanas.turbo-console-log"
+vscode "charliermarsh.ruff"
+vscode "docker.docker"
+vscode "editorconfig.editorconfig"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "github.vscode-github-actions"
+vscode "golang.go"
+vscode "gruntfuggly.todo-tree"
+vscode "jakeboone02.cypher-query-language"
+vscode "jakeboone02.pgn"
+vscode "jetmartin.bats"
+vscode "mechatroner.rainbow-csv"
+vscode "ms-azuretools.vscode-containers"
+vscode "ms-azuretools.vscode-docker"
+vscode "ms-kubernetes-tools.vscode-kubernetes-tools"
+vscode "ms-python.black-formatter"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode.makefile-tools"
+vscode "njpwerner.autodocstring"
+vscode "redhat.ansible"
+vscode "redhat.vscode-openshift-connector"
+vscode "redhat.vscode-redhat-account"
+vscode "redhat.vscode-yaml"
+vscode "reditorsupport.r"
+vscode "reditorsupport.r-syntax"
+vscode "ritwickdey.liveserver"
+vscode "svelte.svelte-vscode"
+vscode "tamasfe.even-better-toml"
+vscode "tomoki1207.pdf"
+vscode "tyriar.lorem-ipsum"
+vscode "vscodevim.vim"
+vscode "yoshinorin.image-metadata-viewer"
+npm "corepack"
+npm "yarn"
