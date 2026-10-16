@@ -7,6 +7,7 @@ tap "nikitabobko/tap"
 tap "oven-sh/bun"
 tap "skyhook-io/tap"
 # GitOps Continuous Delivery for Kubernetes
+brew "actionlint"
 brew "ansible"
 brew "argocd"
 # Record and share terminal sessions
@@ -55,6 +56,7 @@ brew "geos"
 brew "gh"
 # Distributed revision control system
 brew "git"
+brew "gitleaks"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
 # Git extension for versioning large files
@@ -71,6 +73,7 @@ brew "grype"
 brew "harbor-cli"
 # Agent multiplexer that lives in your terminal
 brew "herdr"
+brew "helm@3"
 # Tools and libraries to manipulate images in many formats
 brew "imagemagick"
 # Calculate various network masks, etc. from a given IP address
@@ -80,6 +83,7 @@ brew "isort"
 brew "jq"
 # Colorize your kubectl output
 brew "kubecolor"
+brew "kubernetes-cli"
 # Tool that can switch between kubectl contexts easily and create aliases
 brew "kubectx"
 # Lazier way to manage everything docker
@@ -123,7 +127,7 @@ brew "stylua"
 # Thin wrapper for Terraform e.g. for locking state
 brew "terragrunt"
 # Simplified and community-driven man pages
-brew "tldr"
+brew "tlrc"
 # Terminal multiplexer
 brew "tmux"
 # Display directories as trees (with optional color/HTML output)

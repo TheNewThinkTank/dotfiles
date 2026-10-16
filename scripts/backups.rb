@@ -17,6 +17,39 @@ def current_roots
   { "home" => home, "config" => config }
 end
 
+def configuration_current?(source, managed_home_files)
+  roots = current_roots
+  files = managed_home_files.map { |name| [File.join(source, name), File.join(roots.fetch("home"), name)] }
+  %w[nvim ghostty].each do |application|
+    base = File.realpath(File.join(source, application, ".config", application))
+    Dir.glob(File.join(base, "**", "*"), File::FNM_DOTMATCH).each do |path|
+      next unless File.file?(path)
+      relative = Pathname.new(path).relative_path_from(Pathname.new(base)).to_s
+      files << [path, File.join(roots.fetch("config"), application, relative)]
+    end
+  end
+  settings = File.join(roots.fetch("config"), "dotfiles")
+  platform = ENV.fetch("DOTFILES_PLATFORM")
+  files.concat([
+    [File.join(source, "common/shell/environment.sh"), File.join(settings, "environment.sh")],
+    [File.join(source, "platforms", platform, "shell.sh"), File.join(settings, "platform.d/shell.sh")],
+    [File.join(source, "platforms", platform, "ghostty.conf"), File.join(settings, "platform.d/ghostty.conf")],
+    [File.join(source, "profiles/work/shell.zsh"), File.join(settings, "profiles/work/shell.zsh")]
+  ])
+  return false unless files.all? { |original, destination| File.file?(destination) && File.binread(original) == File.binread(destination) }
+  selectors = {
+    "profile" => ENV.fetch("DOTFILES_PROFILE"),
+    "platform" => ENV.fetch("DOTFILES_PLATFORM"),
+    "package-set" => ENV.fetch("DOTFILES_PACKAGE_SET", "workstation")
+  }
+  selectors.each do |selector, value|
+    destination = File.join(settings, selector)
+    return false unless File.file?(destination) && File.binread(destination) == value + "\n"
+  end
+  private_environment = File.join(roots.fetch("home"), ".private_env")
+  File.file?(private_environment) && (File.stat(private_environment).mode & 0777) == 0600
+end
+
 def resolved_path(path)
   parent = File.expand_path(path)
   suffix = []
@@ -66,7 +99,11 @@ def create_manifest(directory, source, managed_home_files, action = "deployment"
     "roots" => current_roots,
     "physical_roots" => current_roots.transform_values { |path| resolved_path(path) },
     "managed_home_files" => managed_home_files.sort,
-    "selectors" => { "platform" => ENV.fetch("DOTFILES_PLATFORM", "macos"), "profile" => ENV.fetch("DOTFILES_PROFILE", "personal") },
+    "selectors" => {
+      "platform" => ENV.fetch("DOTFILES_PLATFORM", "macos"),
+      "profile" => ENV.fetch("DOTFILES_PROFILE", "personal"),
+      "package_set" => ENV.fetch("DOTFILES_PACKAGE_SET", "workstation")
+    },
     "action" => action,
     "status" => "in_progress",
     "entries" => []
@@ -116,6 +153,9 @@ def verified_restore_entries(directory, managed_home_files)
   raise "Backup managed-file list does not match this checkout" unless saved_home_files.is_a?(Array) && !saved_home_files.empty? && (saved_home_files - managed_home_files).empty?
   if manifest["selectors"]
     raise "Invalid backup selectors" unless %w[macos ubuntu].include?(manifest["selectors"]["platform"]) && %w[personal work].include?(manifest["selectors"]["profile"])
+    if manifest["selectors"].key?("package_set")
+      raise "Invalid backup package set" unless %w[workstation homelab].include?(manifest["selectors"]["package_set"])
+    end
   end
 
   seen = []
@@ -182,6 +222,8 @@ begin
   command = ARGV.shift
   directory = File.expand_path(ARGV.shift || raise("Backup directory is required"))
   case command
+  when "check"
+    exit(configuration_current?(directory, ARGV) ? 0 : 3)
   when "init"
     create_manifest(directory, ARGV.shift || raise("Source directory is required"), ARGV)
   when "finalize"

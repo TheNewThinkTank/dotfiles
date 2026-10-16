@@ -32,7 +32,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install Check Dependencies
-        run: brew install bash bats-core jq neovim openshift-cli shellcheck tmux yq stylua isort prettier rubocop
+        run: brew install bash bats-core jq neovim openshift-cli kubernetes-cli shellcheck tmux yq stylua isort prettier rubocop
       - name: Run Configuration Checks
         run: make check
       - name: Run Real Pinned Integrations
@@ -55,5 +55,27 @@ jobs:
         with:
           persist-credentials: false
       - name: Run Native Ubuntu Checks
+        shell: bash
+        run: bash tests/ubuntu.sh
+
+  ubuntu-homelab:
+    runs-on: ubuntu-latest
+    container: ubuntu:26.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [personal, work]
+    env:
+      DOTFILES_PLATFORM: ubuntu
+      DOTFILES_PROFILE: ${{ matrix.profile }}
+      DOTFILES_PACKAGE_SET: homelab
+    steps:
+      - name: Prepare Ubuntu Container
+        run: apt-get update && apt-get install --no-remove -y ca-certificates git
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Run Lightweight Native Ubuntu Checks
         shell: bash
         run: bash tests/ubuntu.sh

@@ -2,15 +2,24 @@
 
 set -euo pipefail
 PLATFORM_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+package_set="${DOTFILES_PACKAGE_SET:-workstation}"
+case "$package_set" in
+  workstation) package_file="$PLATFORM_DIR/apt-packages.txt" ;;
+  homelab) package_file="$PLATFORM_DIR/apt-homelab-packages.txt" ;;
+  *) printf 'Package set must be workstation or homelab.\n' >&2; exit 2 ;;
+esac
 packages=()
 while IFS= read -r package; do
   [[ -n "$package" ]] || continue
   [[ "$package" =~ ^[a-z0-9][a-z0-9+.-]*$ ]] || { printf 'Invalid APT package name.\n' >&2; exit 1; }
   packages+=("$package")
-done < "$PLATFORM_DIR/apt-packages.txt"
+done < "$package_file"
 if [[ "${1:-}" == --dry-run ]]; then
-  printf 'Would install native Ubuntu packages with APT: %s\n' "${packages[*]}"
-  printf 'Would install missing/version-required pinned Linux tools and a Nerd Font from %s/tools.lock.json.\n' "$PLATFORM_DIR"
+  printf 'Would install native Ubuntu %s packages with APT: %s\n' "$package_set" "${packages[*]}"
+  printf 'Would install checksum-pinned kubectl directly from dl.k8s.io.\n'
+  if [[ "$package_set" == workstation ]]; then
+    printf 'Would install missing/version-required pinned Linux tools and a Nerd Font from %s/tools.lock.json.\n' "$PLATFORM_DIR"
+  fi
   exit 0
 fi
 [[ "$#" == 0 ]] || { printf 'Usage: bash platforms/ubuntu/setup.sh [--dry-run]\n' >&2; exit 2; }
@@ -81,8 +90,16 @@ install_asset() {
 if ! nvim --headless -u NONE --noplugin -i NONE -n '+lua if vim.fn.has("nvim-0.11.3") == 0 then vim.cmd("cquit 1") end' +qa; then
   install_asset neovim "$architecture"
 fi
+install_asset kubectl "$architecture"
+kubectl_version="$(jq -er '.assets.kubectl.version' "$PLATFORM_DIR/tools.lock.json")"
+installed_kubectl_version="$("$HOME/.local/bin/kubectl" version --client --output=json | jq -er '.clientVersion.gitVersion')"
+[[ "$installed_kubectl_version" == "v$kubectl_version" ]] || { printf 'kubectl does not match the declared Kubernetes release.\n' >&2; exit 1; }
+if [[ "$package_set" == homelab ]]; then
+  printf 'Lightweight Ubuntu homelab packages are ready.\n'
+  exit 0
+fi
 if ! command -v stylua >/dev/null; then install_asset stylua "$architecture"; fi
-if ! command -v oc >/dev/null || ! command -v kubectl >/dev/null; then install_asset openshift "$architecture"; fi
+if ! command -v oc >/dev/null; then install_asset openshift "$architecture"; fi
 if ! yq --version 2>/dev/null | grep -q 'mikefarah/yq'; then install_asset yq "$architecture"; fi
 if ! command -v prettier >/dev/null; then
   prettier_version="$(jq -er '.prettier' "$PLATFORM_DIR/tools.lock.json")"

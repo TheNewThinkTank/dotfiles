@@ -37,6 +37,8 @@ clone_missing() {
 
 install_plugins() {
   local lockfile="$1"
+  local operation="${2:-install}"
+  case "$operation" in install|check) ;; *) printf 'Plugin operation must be install or check.\n' >&2; return 2 ;; esac
   command -v jq >/dev/null || return 1
   jq -e '
     .version == 1 and (.plugins | type == "array" and length > 0) and
@@ -51,6 +53,17 @@ install_plugins() {
   local records repository revision destination entrypoint
   records="$(jq -r '.plugins[] | [.repository, .commit, .destination, .entrypoint] | @tsv' "$lockfile")" || return
   while IFS=$'\t' read -r repository revision destination entrypoint; do
-    clone_missing "$repository" "$HOME/$destination" "$entrypoint" "$revision" || return
+    if [[ "$operation" == check ]]; then
+      [[ -e "$HOME/$destination" || -L "$HOME/$destination" ]] || return 3
+      [[ -f "$HOME/$destination/$entrypoint" ]] || { printf 'Incomplete plugin installation: %s\n' "$destination" >&2; return 1; }
+    else
+      clone_missing "$repository" "$HOME/$destination" "$entrypoint" "$revision" || return
+    fi
   done <<< "$records"
 }
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  set -euo pipefail
+  [[ "$#" -ge 1 && "$#" -le 2 ]] || { printf 'Usage: bash scripts/plugins.sh LOCKFILE [install|check]\n' >&2; exit 2; }
+  install_plugins "$1" "${2:-install}"
+fi

@@ -12,10 +12,15 @@
       "x86_64": { "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.6.0/stylua-linux-x86_64.zip", "sha256": "a485f72bbfa22e4642e77a84b5edc2611a5cab7477b34e2e709dd8f78e919895", "format": "zip", "binaries": { "stylua": "stylua" } },
       "aarch64": { "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.6.0/stylua-linux-aarch64.zip", "sha256": "8e67539e5fdf7a81cd03cf592b0df18d3bb96ee17a5ea5d9bf67b86387b903b0", "format": "zip", "binaries": { "stylua": "stylua" } }
     },
+    "kubectl": {
+      "version": "1.37.1",
+      "x86_64": { "url": "https://dl.k8s.io/release/v1.37.1/bin/linux/amd64/kubectl", "sha256": "65691ff77eb6fa44c908b77a1082c9f092c3b9733b5cefabec0d1104890e21a8", "format": "binary", "binaries": { "kubectl": "kubectl" } },
+      "aarch64": { "url": "https://dl.k8s.io/release/v1.37.1/bin/linux/arm64/kubectl", "sha256": "ff749f4b78d9c4f1ec87307df9b50119ed819e2094aa9810cb9acffc3286c8c7", "format": "binary", "binaries": { "kubectl": "kubectl" } }
+    },
     "openshift": {
       "version": "4.22.17",
-      "x86_64": { "url": "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.22.17/openshift-client-linux.tar.gz", "sha256": "466f6c5d060479fca2096b85367c88759ecabe3d12e1328e7debbbd60e3420a7", "format": "tar", "binaries": { "oc": "oc", "kubectl": "kubectl" } },
-      "aarch64": { "url": "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.22.17/openshift-client-linux-arm64.tar.gz", "sha256": "72e807e674ffc774ebf7e7367a341e8cc5198e97717e719ae2590e0ed63ddf71", "format": "tar", "binaries": { "oc": "oc", "kubectl": "kubectl" } }
+      "x86_64": { "url": "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.22.17/openshift-client-linux.tar.gz", "sha256": "466f6c5d060479fca2096b85367c88759ecabe3d12e1328e7debbbd60e3420a7", "format": "tar", "binaries": { "oc": "oc" } },
+      "aarch64": { "url": "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/4.22.17/openshift-client-linux-arm64.tar.gz", "sha256": "72e807e674ffc774ebf7e7367a341e8cc5198e97717e719ae2590e0ed63ddf71", "format": "tar", "binaries": { "oc": "oc" } }
     },
     "yq": {
       "version": "4.54.1",

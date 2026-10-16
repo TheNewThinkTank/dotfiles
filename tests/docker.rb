@@ -54,6 +54,9 @@ Dir.mktmpdir("dotfiles-ubuntu-source-") do |source|
     "--workdir", "/workspace", "--env", "HOME=/tmp/dotfiles-ubuntu-home",
     "--env", "DOTFILES_PLATFORM=ubuntu"
   ]
+  package_set = ENV.fetch("DOTFILES_PACKAGE_SET", "workstation")
+  raise "Invalid Ubuntu test package set" unless %w[workstation homelab].include?(package_set)
+  arguments.concat(["--env", "DOTFILES_PACKAGE_SET=#{package_set}"])
   arguments.concat(["--env", "DOTFILES_DOCKER_CA_FILE=/workspace/.docker-ca/roots.pem"]) if use_host_certificates
   arguments.concat(["ubuntu:26.04", "bash", "tests/ubuntu.sh"])
   puts "Starting native Ubuntu 26.04 checks. Full log: #{results}/output.log"

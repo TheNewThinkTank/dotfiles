@@ -10,6 +10,12 @@ Platform and profile are independent: `macos` or `ubuntu`, and `personal` or
 Personal is the default profile. Both profiles use the same tools and shared
 configuration; only work explicitly loads OpenShift zsh completion.
 
+Package selection is independent too: `workstation` is the unchanged default
+for macOS and Ubuntu. Ubuntu also supports `--package-set homelab`, which installs
+only the shared shell/editor prerequisites and official kubectl, without desktop
+applications, OpenShift, language-formatting tools, or font downloads. macOS
+rejects that reduced package set rather than silently changing new MacBook setup.
+
 ```bash
 # Personal macOS
 ./bootstrap.sh --platform macos --profile personal --dry-run
@@ -21,10 +27,14 @@ configuration; only work explicitly loads OpenShift zsh completion.
 # Personal Ubuntu 26.04
 ./bootstrap.sh --platform ubuntu --profile personal --dry-run
 ./bootstrap.sh --platform ubuntu --profile personal
+
+# Lightweight Ubuntu homelab user environment
+./bootstrap.sh --platform ubuntu --profile personal --package-set homelab --dry-run
+./bootstrap.sh --platform ubuntu --profile personal --package-set homelab
 ```
 
 Bootstrap saves validated choices under `${XDG_CONFIG_HOME:-$HOME/.config}/dotfiles`
-as `profile` and `platform`. These machine-local files are not committed. Subsequent
+as `profile`, `platform`, and `package-set`. These machine-local files are not committed. Subsequent
 configuration deployments retain the saved profile. `DOTFILES_PROFILE=work zsh`
 or `DOTFILES_PROFILE=personal zsh` overrides it for an individual terminal.
 Bootstrap flags take precedence over environment variables and saved defaults.
@@ -96,12 +106,28 @@ Edit files in this checkout, then deploy them with backups:
 ```bash
 ./bootstrap.sh --dry-run --skip-install
 ./bootstrap.sh --skip-install
+./bootstrap.sh --check
 ```
 
 `--dry-run` prints the plan without installing packages, contacting remotes, or
 writing files. `--skip-install` only deploys configuration. `--force` skips the
 confirmation prompt, not backups. `--update` explicitly fast-forwards a clean
 checkout from `origin/main`; bootstrap never pulls automatically.
+
+`--check` is a read-only configuration comparison: exit 0 means managed content
+and saved selectors match, exit 3 means deployment is needed, and other nonzero
+statuses are errors. It does not install packages, inspect secret contents, or
+contact Git remotes. It checks configuration, not the whole package/plugin state.
+The plugin helper has an independent read-only interface:
+
+```bash
+bash scripts/plugins.sh plugins.lock.json check
+bash scripts/plugins.sh plugins.lock.json install
+```
+
+An unchanged configuration deployment creates no extra backup. A real content
+change still uses the existing backup/restore mechanism, including edits that
+preserve file size and timestamps. Extra local files and overrides are retained.
 
 Bootstrap copies configuration rather than creating symlinks. Existing links
 directly to this checkout are preserved. Backups contain the prior home files
@@ -198,11 +224,24 @@ Non-root users must authorize sudo in their own terminal with `sudo -v` before
 setup; the script only uses noninteractive sudo. Configuration-only deployments
 with `--skip-install` do not require privilege escalation.
 
-If required tools are missing, checksum-pinned Linux assets provide StyLua,
-OpenShift/kubectl, and Mike Farah yq, plus Neovim if APT's version is too old.
+Checksum-pinned kubectl comes directly from Kubernetes at `dl.k8s.io`, currently
+`v1.37.1` for x86_64 and aarch64. The installed client version is checked. OpenShift
+is a separate `oc`-only download in the workstation package set and can never
+publish or replace kubectl. The lightweight homelab set does not install `oc`.
+
+If required tools are missing, workstation assets provide StyLua and Mike Farah
+yq, plus Neovim if APT's version is too old.
 Prettier is version-pinned under `~/.local`; a verified JetBrains Mono Nerd Font
 is installed per user. Existing local binaries are not silently replaced.
 Assets cover x86_64 and aarch64 in `platforms/ubuntu/tools.lock.json`.
+
+Existing user-local binaries are preserved. If your current kubectl came from
+the older OpenShift bundle, back it up and deliberately relocate it before
+selecting the official client. Updating an asset pin is not permission to
+overwrite a custom executable silently. On macOS, the full Brewfile includes
+Homebrew's official `kubernetes-cli` formula, Helm 3, Gitleaks, and actionlint in
+addition to the existing Terraform/Ansible/uv setup. Check client/server version
+compatibility when administering older Kubernetes clusters.
 
 GNOME desktop shortcuts are separate and opt-in:
 
@@ -248,10 +287,28 @@ It reports deprecated/disabled formulae and casks, plus Homebrew-provided
 replacement suggestions. It does not install, uninstall, or edit entries.
 Metadata lookup failures return an error rather than a false clean report.
 
-The current audit flags deprecated Whisky and `python-tk@3.11`, and disabled
-`tldr` with `tlrc` suggested as its replacement. They remain in the Brewfile
-pending explicit approval. Disabled entries can prevent a fresh-machine package
-installation even when existing installations still work.
+The disabled `tldr` formula was replaced with its maintained `tlrc` replacement
+with explicit approval. No other existing formula or cask was removed. Run the
+audit before a new-machine setup; deprecation warnings are reported without
+silently pruning your maintained package list. Disabled future entries can still
+block installation and need a reviewed replacement.
+
+## Homelab Integration
+
+The sibling homelab project can opt into user configuration from a full published
+commit SHA of this repository. Publish the new bootstrap/package/client interface
+before selecting that commit; a moving branch is not a reproducible dependency.
+The Ansible role reads the lightweight package manifest and tool lock from that
+revision, manages APT state separately, installs only missing pinned plugins, and
+deploys configuration only when `--check` detects differences. It runs user tasks
+as `ubuntu`, not root. System hardening, Desktop installation, Kubernetes, and
+monitoring stay in the homelab project.
+
+Homelab never copies the administrator workstation's private environment,
+overrides, SSH keys, or kubeconfig to guests. Its `make kube-shell` explicitly
+selects the project-private kubeconfig only for a child controller shell, using
+the existing shell completions without changing global dotfiles or merging
+administrator credentials into every VM.
 
 ## Git tips
 
@@ -286,6 +343,9 @@ make integration
 
 # Ubuntu 26.04 container: native package setup and both profiles
 make ubuntu
+
+# Native lightweight Ubuntu setup and repeat-run checks
+DOTFILES_PACKAGE_SET=homelab make ubuntu
 ```
 
 The checks cover shell syntax, ShellCheck, Lua/JSON/TOML/YAML configuration,
@@ -303,6 +363,7 @@ defaults and completion providers. The integration-only Mason option disables
 language-server downloads; normal Neovim startup still provisions its four
 servers. Tests do not deploy live dotfiles or reset the working repository.
 CI covers personal and work profiles on macOS and in an Ubuntu 26.04 container.
+Separate native Ubuntu jobs cover both workstation and homelab package sets.
 `make ubuntu` requires a running Docker daemon and mounts a read-only public-file
 snapshot; private environment files and local overrides are excluded. It retains
 full logs and result metadata in the temporary result directory it prints.

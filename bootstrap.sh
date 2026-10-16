@@ -13,14 +13,16 @@ ALL_ROOT_CONFIGS=(
 )
 platform="${DOTFILES_PLATFORM:-}"
 profile="${DOTFILES_PROFILE:-}"
+package_set="${DOTFILES_PACKAGE_SET:-}"
 force=false
 dry_run=false
+check=false
 skip_install=false
 update=false
 restore_dir=""
 
 usage() {
-  printf 'Usage: %s [--profile personal|work] [--platform macos|ubuntu] [--force|-f] [--dry-run] [--skip-install] [--update] [--restore BACKUP]\n' "$0"
+  printf 'Usage: %s [--profile personal|work] [--platform macos|ubuntu] [--package-set workstation|homelab] [--force|-f] [--dry-run] [--check] [--skip-install] [--update] [--restore BACKUP]\n' "$0"
 }
 
 die() {
@@ -32,11 +34,16 @@ while [[ "$#" != 0 ]]; do
   case "$1" in
     --force|-f) force=true ;;
     --dry-run) dry_run=true ;;
+    --check) check=true ;;
     --skip-install) skip_install=true ;;
     --update) update=true ;;
-    --profile|--platform)
+    --profile|--platform|--package-set)
       [[ "$#" -ge 2 && -n "$2" && "$2" != --* ]] || { usage >&2; exit 2; }
-      if [[ "$1" == --profile ]]; then profile="$2"; else platform="$2"; fi
+      case "$1" in
+        --profile) profile="$2" ;;
+        --platform) platform="$2" ;;
+        --package-set) package_set="$2" ;;
+      esac
       shift
       ;;
     --restore)
@@ -51,6 +58,9 @@ while [[ "$#" != 0 ]]; do
 done
 
 [[ "$CONFIG_DIR" == /* && "$STATE_DIR" == /* ]] || die 'XDG directories must be absolute paths.'
+if "$check" && { "$force" || "$dry_run" || "$update" || [[ -n "$restore_dir" ]]; }; then
+  die '--check cannot be combined with deployment, preview, or restore flags.'
+fi
 
 if [[ -z "$profile" ]]; then
   if [[ -r "$CONFIG_DIR/dotfiles/profile" ]]; then
@@ -74,7 +84,16 @@ if [[ -z "$platform" ]]; then
   esac
 fi
 case "$platform" in macos|ubuntu) ;; *) die 'Platform must be macos or ubuntu.' ;; esac
-export DOTFILES_PROFILE="$profile" DOTFILES_PLATFORM="$platform"
+if [[ -z "$package_set" ]]; then
+  if [[ -r "$CONFIG_DIR/dotfiles/package-set" ]]; then
+    package_set="$(<"$CONFIG_DIR/dotfiles/package-set")"
+  else
+    package_set=workstation
+  fi
+fi
+case "$package_set" in workstation|homelab) ;; *) die 'Package set must be workstation or homelab.' ;; esac
+[[ "$platform" == ubuntu || "$package_set" == workstation ]] || die 'The homelab package set is Ubuntu-only; macOS retains workstation setup.'
+export DOTFILES_PROFILE="$profile" DOTFILES_PLATFORM="$platform" DOTFILES_PACKAGE_SET="$package_set"
 ROOT_CONFIGS=()
 for config in "${ALL_ROOT_CONFIGS[@]}"; do
   [[ "$config" != .aerospace.toml || "$platform" == macos ]] || continue
@@ -88,8 +107,19 @@ if [[ -n "$restore_dir" ]]; then
   exec ruby "$DOTFILES_DIR/scripts/backups.rb" restore "$restore_dir" "$dry_run" "${ALL_ROOT_CONFIGS[@]}"
 fi
 
+if "$check"; then
+  check_result=0
+  ruby "$DOTFILES_DIR/scripts/backups.rb" check "$DOTFILES_DIR" "${ROOT_CONFIGS[@]}" || check_result=$?
+  case "$check_result" in
+    0) printf 'Configuration unchanged.\n' ;;
+    3) printf 'Configuration changes required.\n' ;;
+  esac
+  exit "$check_result"
+fi
+
 if "$dry_run"; then
   printf 'Platform: %s; profile: %s\n' "$platform" "$profile"
+  printf 'Package set: %s\n' "$package_set"
   "$update" && printf 'Would update a clean checkout using git pull --ff-only.\n'
   if ! "$skip_install"; then
     bash "$DOTFILES_DIR/platforms/$platform/setup.sh" --dry-run
@@ -133,6 +163,14 @@ if ! "$skip_install"; then
   install_plugins "$DOTFILES_DIR/plugins.lock.json"
 fi
 
+check_result=0
+ruby "$DOTFILES_DIR/scripts/backups.rb" check "$DOTFILES_DIR" "${ROOT_CONFIGS[@]}" || check_result=$?
+if [[ "$check_result" == 0 ]]; then
+  printf 'Configuration unchanged. Open a new terminal to load it.\n'
+  exit 0
+fi
+[[ "$check_result" == 3 ]] || exit "$check_result"
+
 mkdir -p "$STATE_DIR/dotfiles/backups"
 backup_dir="$(mktemp -d "$STATE_DIR/dotfiles/backups/$(date +%Y%m%d-%H%M%S)-XXXXXX")"
 printf 'Backups: %s\n' "$backup_dir"
@@ -157,7 +195,7 @@ sync_config() {
   if [[ "$source_path" -ef "$destination" ]]; then
     return 0
   fi
-  rsync -av --copy-links --no-perms --backup --backup-dir="$backup_path" "$source_path" "$destination"
+  rsync -av --ignore-times --copy-links --no-perms --backup --backup-dir="$backup_path" "$source_path" "$destination"
 }
 
 for config in "${ROOT_CONFIGS[@]}"; do
@@ -168,6 +206,7 @@ sync_config "$DOTFILES_DIR/ghostty/.config/ghostty/" "$CONFIG_DIR/ghostty/" "$ba
 selector_staging="$(mktemp -d "$backup_dir/.selectors-XXXXXX")"
 printf '%s\n' "$profile" > "$selector_staging/profile"
 printf '%s\n' "$platform" > "$selector_staging/platform"
+printf '%s\n' "$package_set" > "$selector_staging/package-set"
 cp "$DOTFILES_DIR/common/shell/environment.sh" "$selector_staging/environment.sh"
 mkdir -p "$selector_staging/platform.d" "$selector_staging/profiles/work"
 cp "$DOTFILES_DIR/platforms/$platform/shell.sh" "$selector_staging/platform.d/shell.sh"

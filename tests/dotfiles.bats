@@ -16,7 +16,7 @@ setup() {
   export XDG_DATA_HOME="$HOME/.local/share"
   export XDG_CACHE_HOME="$HOME/.cache"
   export MOCK_LOG="$BATS_TEST_TMPDIR/installer-calls"
-  unset MOCK_BREW_EXIT MOCK_GIT_DIRTY MOCK_GIT_EXIT MOCK_PARTIAL_CLONE MOCK_PIN_MISMATCH MOCK_BREW_INFO MOCK_BREW_INFO_EXIT DOTFILES_PROFILE DOTFILES_PLATFORM
+  unset MOCK_BREW_EXIT MOCK_GIT_DIRTY MOCK_GIT_EXIT MOCK_PARTIAL_CLONE MOCK_PIN_MISMATCH MOCK_BREW_INFO MOCK_BREW_INFO_EXIT DOTFILES_PROFILE DOTFILES_PLATFORM DOTFILES_PACKAGE_SET
   export DOTFILES_PLATFORM=macos
   mkdir -p "$HOME/bin"
   export PATH="$HOME/bin:$PATH"
@@ -83,6 +83,49 @@ teardown() {
   fi
 }
 
+prepare_homelab_asset_test() {
+  ASSET_PLATFORM="$BATS_TEST_TMPDIR/platform"
+  export MOCK_KUBECTL="$BATS_TEST_TMPDIR/kubectl-fixture"
+  mkdir -p "$ASSET_PLATFORM"
+  cp "$REPO_ROOT/platforms/ubuntu/setup.sh" "$REPO_ROOT/platforms/ubuntu/apt-homelab-packages.txt" "$ASSET_PLATFORM/"
+  cat > "$MOCK_KUBECTL" <<'MOCK'
+#!/usr/bin/env bash
+printf '{"clientVersion":{"gitVersion":"v1.37.1"}}\n'
+MOCK
+  checksum="$(ruby -rdigest -e 'puts Digest::SHA256.file(ARGV[0]).hexdigest' "$MOCK_KUBECTL")"
+  jq --arg checksum "$checksum" '
+    .assets.kubectl.x86_64.sha256 = $checksum |
+    .assets.kubectl.aarch64.sha256 = $checksum
+  ' "$REPO_ROOT/platforms/ubuntu/tools.lock.json" > "$ASSET_PLATFORM/tools.lock.json"
+  cat > "$HOME/bin/curl" <<'MOCK'
+#!/usr/bin/env bash
+printf 'curl %s\n' "$*" >> "$MOCK_LOG"
+while [[ "$#" != 0 ]]; do
+  if [[ "$1" == -o ]]; then cp "$MOCK_KUBECTL" "$2"; exit; fi
+  shift
+done
+exit 2
+MOCK
+  cat > "$HOME/bin/apt-get" <<'MOCK'
+#!/usr/bin/env bash
+printf 'apt-get %s\n' "$*" >> "$MOCK_LOG"
+MOCK
+  cat > "$HOME/bin/sudo" <<'MOCK'
+#!/usr/bin/env bash
+shift
+exec "$@"
+MOCK
+  cat > "$HOME/bin/nvim" <<'MOCK'
+#!/usr/bin/env bash
+exit 0
+MOCK
+  cat > "$HOME/bin/uname" <<'MOCK'
+#!/usr/bin/env bash
+printf '%s\n' "${MOCK_LINUX_ARCH:-x86_64}"
+MOCK
+  chmod +x "$HOME/bin/curl" "$HOME/bin/apt-get" "$HOME/bin/sudo" "$HOME/bin/nvim" "$HOME/bin/uname"
+}
+
 @test "bootstrap dry-run has no installer or filesystem side effects" {
   before="$(find "$HOME" -print | sort)"
   run bash "$REPO_ROOT/bootstrap.sh" --dry-run
@@ -91,6 +134,56 @@ teardown() {
   [[ "$output" == *"$XDG_CONFIG_HOME/ghostty/"* ]]
   [[ ! -e "$MOCK_LOG" ]]
   [[ "$(find "$HOME" -print | sort)" == "$before" ]]
+}
+
+@test "configuration check is read-only and repeated deployment converges" {
+  before="$(find "$HOME" -print | sort)"
+  run bash "$REPO_ROOT/bootstrap.sh" --check --platform ubuntu --profile personal
+  [[ "$status" == 3 ]]
+  [[ "$(find "$HOME" -print | sort)" == "$before" ]]
+  [[ ! -e "$MOCK_LOG" ]]
+
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+  backups=("$XDG_STATE_HOME"/dotfiles/backups/*)
+  backup_count="${#backups[@]}"
+  run bash "$REPO_ROOT/bootstrap.sh" --check --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal
+  [[ "$status" == 0 && "$output" == *'Configuration unchanged'* ]]
+  backups=("$XDG_STATE_HOME"/dotfiles/backups/*)
+  [[ "${#backups[@]}" == "$backup_count" ]]
+
+  printf 'local drift\n' > "$HOME/.zshrc"
+  run bash "$REPO_ROOT/bootstrap.sh" --check --platform ubuntu --profile personal
+  [[ "$status" == 3 ]]
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+  cmp "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
+}
+
+@test "deployment repairs same-size content drift with preserved timestamps" {
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+  ruby -e 'file = ARGV.fetch(0); content = File.binread(file); content.setbyte(0, 65); File.binwrite(file, content)' "$HOME/.zshrc"
+  touch -r "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
+  run bash "$REPO_ROOT/bootstrap.sh" --check --platform ubuntu --profile personal
+  [[ "$status" == 3 ]]
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+  cmp "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
+}
+
+@test "plugin check is read-only and converges after installation" {
+  before="$(find "$HOME" -print | sort)"
+  run bash "$REPO_ROOT/scripts/plugins.sh" "$REPO_ROOT/plugins.lock.json" check
+  [[ "$status" == 3 && ! -e "$MOCK_LOG" ]]
+  [[ "$(find "$HOME" -print | sort)" == "$before" ]]
+  run bash "$REPO_ROOT/scripts/plugins.sh" "$REPO_ROOT/plugins.lock.json" install
+  [[ "$status" == 0 ]]
+  calls="$(wc -l < "$MOCK_LOG")"
+  run bash "$REPO_ROOT/scripts/plugins.sh" "$REPO_ROOT/plugins.lock.json" check
+  [[ "$status" == 0 && "$(wc -l < "$MOCK_LOG")" == "$calls" ]]
 }
 
 @test "bootstrap rejects unknown arguments without installing" {
@@ -127,6 +220,72 @@ teardown() {
   run jq -e '.version == 1 and all(.assets[]; all(to_entries[] | select(.key != "version"); (.value.sha256 | test("^[0-9a-f]{64}$")) and (.value.url | startswith("https://"))))' "$REPO_ROOT/platforms/ubuntu/tools.lock.json"
   [[ "$status" == 0 ]]
   [[ ! -e "$MOCK_LOG" ]]
+}
+
+@test "homelab package selection is lightweight Ubuntu-only and saved" {
+  run bash "$REPO_ROOT/bootstrap.sh" --dry-run --platform ubuntu --profile personal --package-set homelab
+  [[ "$status" == 0 && "$output" == *'Package set: homelab'* ]]
+  [[ "$output" == *'tmux'* && "$output" != *'ghostty fontconfig'* ]]
+  run env DOTFILES_PACKAGE_SET=homelab bash "$REPO_ROOT/platforms/ubuntu/setup.sh" --dry-run
+  [[ "$status" == 0 && "$output" != *wl-clipboard* && "$output" != *build-essential* ]]
+  run bash "$REPO_ROOT/bootstrap.sh" --platform macos --package-set homelab --dry-run
+  [[ "$status" == 1 && "$output" == *'Ubuntu-only'* ]]
+  [[ ! -e "$MOCK_LOG" ]]
+  run bash "$REPO_ROOT/bootstrap.sh" --force --skip-install --platform ubuntu --profile personal --package-set homelab
+  [[ "$status" == 0 ]]
+  grep -qx homelab "$XDG_CONFIG_HOME/dotfiles/package-set"
+  run bash "$REPO_ROOT/bootstrap.sh" --check --platform ubuntu --profile personal
+  [[ "$status" == 0 ]]
+}
+
+@test "MacBook manifest includes homelab controller tools and maintained manual pages" {
+  for package in actionlint gitleaks helm@3 kubernetes-cli tlrc; do
+    grep -qx "brew \"$package\"" "$REPO_ROOT/platforms/macos/Brewfile"
+  done
+  run grep -qx 'brew "tldr"' "$REPO_ROOT/platforms/macos/Brewfile"
+  [[ "$status" == 1 ]]
+}
+
+@test "kubectl is pinned to Kubernetes and never installed from OpenShift" {
+  run jq -e '
+    .assets.kubectl.version == "1.37.1" and
+    (.assets.kubectl.x86_64.url | startswith("https://dl.k8s.io/")) and
+    (.assets.kubectl.aarch64.url | startswith("https://dl.k8s.io/")) and
+    (.assets.openshift.x86_64.binaries | has("kubectl") | not) and
+    (.assets.openshift.aarch64.binaries | has("kubectl") | not)
+  ' "$REPO_ROOT/platforms/ubuntu/tools.lock.json"
+  [[ "$status" == 0 ]]
+}
+
+@test "homelab installer verifies official kubectl once and does not install OpenShift" {
+  prepare_homelab_asset_test
+  run env DOTFILES_PACKAGE_SET=homelab bash "$ASSET_PLATFORM/setup.sh"
+  [[ "$status" == 0 && -x "$HOME/.local/bin/kubectl" ]]
+  grep -q 'https://dl.k8s.io/' "$MOCK_LOG"
+  [[ "$(grep -c '^curl ' "$MOCK_LOG")" == 1 ]]
+  run env DOTFILES_PACKAGE_SET=homelab bash "$ASSET_PLATFORM/setup.sh"
+  [[ "$status" == 0 ]]
+  [[ "$(grep -c '^curl ' "$MOCK_LOG")" == 1 ]]
+  run grep -E 'openshift|fc-cache|npm install' "$MOCK_LOG"
+  [[ "$status" == 1 ]]
+}
+
+@test "kubectl checksum failure never publishes a binary or leaves staging" {
+  prepare_homelab_asset_test
+  printf 'tampered fixture\n' >> "$MOCK_KUBECTL"
+  run env DOTFILES_PACKAGE_SET=homelab bash "$ASSET_PLATFORM/setup.sh"
+  [[ "$status" == 1 && "$output" == *'checksum mismatch'* ]]
+  [[ ! -e "$HOME/.local/bin/kubectl" && ! -L "$HOME/.local/bin/kubectl" ]]
+  [[ -z "$(find "$XDG_DATA_HOME/dotfiles/tools" -name '.install-*' -print)" ]]
+}
+
+@test "kubectl installation preserves an existing user-local binary" {
+  prepare_homelab_asset_test
+  mkdir -p "$HOME/.local/bin"
+  printf 'preserve existing client\n' > "$HOME/.local/bin/kubectl"
+  run env DOTFILES_PACKAGE_SET=homelab bash "$ASSET_PLATFORM/setup.sh"
+  [[ "$status" == 1 && "$output" == *'Preserve or relocate'* ]]
+  grep -qx 'preserve existing client' "$HOME/.local/bin/kubectl"
 }
 
 @test "Ubuntu package mappings provision formatter executables not only libraries" {
@@ -187,7 +346,9 @@ MOCK
   run jq -e '
     .jobs.macos."runs-on" == "macos-latest" and .jobs.ubuntu.container == "ubuntu:26.04" and
     .jobs.macos.strategy.matrix.profile == ["personal", "work"] and
-    .jobs.ubuntu.strategy.matrix.profile == ["personal", "work"]
+    .jobs.ubuntu.strategy.matrix.profile == ["personal", "work"] and
+    .jobs["ubuntu-homelab"].env.DOTFILES_PACKAGE_SET == "homelab" and
+    .jobs["ubuntu-homelab"].strategy.matrix.profile == ["personal", "work"]
   ' <<< "$output"
   [[ "$status" == 0 ]]
 }
