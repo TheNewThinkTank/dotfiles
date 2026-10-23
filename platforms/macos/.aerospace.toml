@@ -4,6 +4,10 @@
 # It's not necessary to copy all keys to your config.
 # If the key is missing in your config, "default-config.toml" will serve as a fallback
 
+# Config version for compatibility and deprecations
+# See: https://nikitabobko.github.io/AeroSpace/guide#config-version
+config-version = 2
+
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -88,52 +92,52 @@ on-focus-changed = "move-mouse window-lazy-center"
     alt-slash = 'layout tiles horizontal vertical'
     alt-comma = 'layout accordion horizontal vertical'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#focus
-alt-h = 'focus left'
-alt-j = 'focus down'
-alt-k = 'focus up'
-alt-l = 'focus right'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
+    alt-h = 'focus left'
+    alt-j = 'focus down'
+    alt-k = 'focus up'
+    alt-l = 'focus right'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move
-alt-shift-ctrl-cmd-h = 'move left'
-alt-shift-ctrl-cmd-j = 'move down'
-alt-shift-ctrl-cmd-k = 'move up'
-alt-shift-ctrl-cmd-l = 'move right'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move
+    alt-shift-ctrl-cmd-h = 'move left'
+    alt-shift-ctrl-cmd-j = 'move down'
+    alt-shift-ctrl-cmd-k = 'move up'
+    alt-shift-ctrl-cmd-l = 'move right'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-alt-1 = 'workspace 1'
-alt-2 = 'workspace 2'
-alt-3 = 'workspace 3'
-alt-4 = 'workspace 4'
-alt-5 = 'workspace 5'
-alt-6 = 'workspace 6'
-alt-7 = 'workspace 7'
-alt-t = 'workspace T'
-alt-e = 'workspace E'
-alt-c = 'workspace C'
-alt-b = 'workspace B'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+    alt-1 = 'workspace 1'
+    alt-2 = 'workspace 2'
+    alt-3 = 'workspace 3'
+    alt-4 = 'workspace 4'
+    alt-5 = 'workspace 5'
+    alt-6 = 'workspace 6'
+    alt-7 = 'workspace 7'
+    alt-t = 'workspace T'
+    alt-e = 'workspace E'
+    alt-c = 'workspace C'
+    alt-b = 'workspace B'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-alt-shift-1 = 'move-node-to-workspace 1'
-alt-shift-2 = 'move-node-to-workspace 2'
-alt-shift-3 = 'move-node-to-workspace 3'
-alt-shift-4 = 'move-node-to-workspace 4'
-alt-shift-5 = 'move-node-to-workspace 5'
-alt-shift-6 = 'move-node-to-workspace 6'
-alt-shift-7 = 'move-node-to-workspace 7'
-alt-shift-e = 'move-node-to-workspace E'
-alt-shift-c = 'move-node-to-workspace C'
-alt-shift-b = 'move-node-to-workspace B'
-alt-shift-t = 'move-node-to-workspace T'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+    alt-shift-1 = 'move-node-to-workspace 1'
+    alt-shift-2 = 'move-node-to-workspace 2'
+    alt-shift-3 = 'move-node-to-workspace 3'
+    alt-shift-4 = 'move-node-to-workspace 4'
+    alt-shift-5 = 'move-node-to-workspace 5'
+    alt-shift-6 = 'move-node-to-workspace 6'
+    alt-shift-7 = 'move-node-to-workspace 7'
+    alt-shift-e = 'move-node-to-workspace E'
+    alt-shift-c = 'move-node-to-workspace C'
+    alt-shift-b = 'move-node-to-workspace B'
+    alt-shift-t = 'move-node-to-workspace T'
 
-alt-shift-f = 'fullscreen'
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-alt-tab = 'workspace-back-and-forth'
-# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-alt-shift-tab = 'move-node-to-monitor --wrap-around next'
-# See: https://nikitabobko.github.io/AeroSpace/commands#mode
-alt-shift-q = 'mode service'
-alt-shift-r = 'mode resize'
+    alt-shift-f = 'fullscreen'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+    alt-tab = 'workspace-back-and-forth'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+    alt-shift-tab = 'move-node-to-monitor --wrap-around next'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
+    alt-shift-q = 'mode service'
+    alt-shift-r = 'mode resize'
 
 [mode.resize.binding]
     h = 'resize width -50'
