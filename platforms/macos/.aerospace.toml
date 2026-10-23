@@ -53,12 +53,12 @@ on-focus-changed = "move-mouse window-lazy-center"
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 5
-inner.vertical =   5
-outer.left =       5
-outer.bottom =     5
-outer.top =        5
-outer.right =      5
+    inner.horizontal = 5
+    inner.vertical =   5
+    outer.left =       5
+    outer.bottom =     5
+    outer.top =        5
+    outer.right =      5
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -84,10 +84,9 @@ outer.right =      5
 # alt-enter = 'exec-and-forget open -n /System/Applications/Utilities/Terminal.app'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-
 [mode.main.binding]
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+    alt-slash = 'layout tiles horizontal vertical'
+    alt-comma = 'layout accordion horizontal vertical'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'
@@ -109,8 +108,6 @@ alt-4 = 'workspace 4'
 alt-5 = 'workspace 5'
 alt-6 = 'workspace 6'
 alt-7 = 'workspace 7'
-# alt-8 = 'workspace 8'
-# alt-9 = 'workspace 9'
 alt-t = 'workspace T'
 alt-e = 'workspace E'
 alt-c = 'workspace C'
@@ -124,8 +121,6 @@ alt-shift-4 = 'move-node-to-workspace 4'
 alt-shift-5 = 'move-node-to-workspace 5'
 alt-shift-6 = 'move-node-to-workspace 6'
 alt-shift-7 = 'move-node-to-workspace 7'
-# alt-shift-8 = 'move-node-to-workspace 8'
-# alt-shift-9 = 'move-node-to-workspace 9'
 alt-shift-e = 'move-node-to-workspace E'
 alt-shift-c = 'move-node-to-workspace C'
 alt-shift-b = 'move-node-to-workspace B'
@@ -141,50 +136,50 @@ alt-shift-q = 'mode service'
 alt-shift-r = 'mode resize'
 
 [mode.resize.binding]
-h = 'resize width -50'
-j = 'resize height +50'
-k = 'resize height -50'
-l = 'resize width +50'
-b = 'balance-sizes'
-# See: https://nikitabobko.github.io/AeroSpace/commands#resize
-minus = 'resize smart -50'
-equal = 'resize smart +50'
-enter = 'mode main'
-esc = 'mode main'
+    h = 'resize width -50'
+    j = 'resize height +50'
+    k = 'resize height -50'
+    l = 'resize width +50'
+    b = 'balance-sizes'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    minus = 'resize smart -50'
+    equal = 'resize smart +50'
+    enter = 'mode main'
+    esc = 'mode main'
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-esc = ['reload-config', 'mode main']
-r = ['flatten-workspace-tree', 'mode main'] # reset layout
-#s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-backspace = ['close-all-windows-but-current', 'mode main']
-alt-shift-h = ['join-with left', 'mode main']
-alt-shift-j = ['join-with down', 'mode main']
-alt-shift-k = ['join-with up', 'mode main']
-alt-shift-l = ['join-with right', 'mode main']
+    esc = ['reload-config', 'mode main']
+    r = ['flatten-workspace-tree', 'mode main'] # reset layout
+    #s = ['layout sticky tiling', 'mode main'] # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
+    backspace = ['close-all-windows-but-current', 'mode main']
+    alt-shift-h = ['join-with left', 'mode main']
+    alt-shift-j = ['join-with down', 'mode main']
+    alt-shift-k = ['join-with up', 'mode main']
+    alt-shift-l = ['join-with right', 'mode main']
 
-[workspace-to-monitor-force-assignment]
-T = '^built-in retina display$'
-E = '^built-in retina display$'
+# [workspace-to-monitor-force-assignment]
+    # T = '^built-in retina display$'
+    # E = '^built-in retina display$'
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.teams2'
-run = ['move-node-to-workspace T']
+# [[on-window-detected]]
+    # if.app-id = 'com.microsoft.teams2'
+    # run = ['move-node-to-workspace T']
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.Outlook'
-run = ['move-node-to-workspace E']
+# [[on-window-detected]]
+    # if.app-id = 'com.microsoft.Outlook'
+    # run = ['move-node-to-workspace E']
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.edgemac'
-run = ['move-node-to-workspace B']
+# [[on-window-detected]]
+    # if.app-id = 'com.microsoft.edgemac'
+    # run = ['move-node-to-workspace B']
 
-[[on-window-detected]]
-if.app-id = 'com.microsoft.VSCode'
-run = ['move-node-to-workspace C']
+# [[on-window-detected]]
+    # if.app-id = 'com.microsoft.VSCode'
+    # run = ['move-node-to-workspace C']
 
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = ['layout tiling']
+# [[on-window-detected]]
+    # if.app-id = 'com.mitchellh.ghostty'
+    # run = ['layout tiling']
